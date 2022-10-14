@@ -9,7 +9,10 @@ def main():
             print(queens(start_pos, n))
             print("\n")
         except ValueError:
-            print("Error")
+            print("Value error. If you are unsure about entry format read `README.md`.")
+            continue
+        except IndexError:
+            print("Index error. Your value is out of range.")
             continue
 
 

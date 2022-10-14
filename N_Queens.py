@@ -21,7 +21,7 @@ def queens(position: str, size: int) -> str:
     board = [[0 for i in range(size)] for i in range(size)]
     if position != "":
         row = int(position[1]) * -1
-        col = int(chr(ord(position[0])-49))
+        col = int(ord(position[0])-97)
         board[row][col] = 1
     if solve_N_queens(board, 0):
         print_out(board)

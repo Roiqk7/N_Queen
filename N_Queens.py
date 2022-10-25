@@ -1,10 +1,9 @@
+from timeit import default_timer
+
 def main():
     while True:
         try:
             n = int(input("Enter N: ").replace(" ", ""))
-            if n > 22:
-                print("N is too high. Maximum allowed value is 22.")
-                continue
             start_pos = input("(optional) Enter starting position of the Queen: ").replace(" ", "").lower()
             print(queens(start_pos, n))
             print("\n")
@@ -20,13 +19,17 @@ queen_positions = []
 QUEEN_CHAR = "Q"
 EMPTY_CHAR = "."
 
+
 def queens(position: str, size: int) -> str:
+    start = default_timer()
     board = [[0 for i in range(size)] for i in range(size)]
     if position != "":
         row = int(position[1:]) * -1
         col = int(ord(position[0])-97)
         board[row][col] = 1
     if solve_N_queens(board, 0):
+        run_time = default_timer() - start
+        print(f"{run_time:.3f}s")
         print_out(board)
         queen_positions.clear()
         return format_return(board)
@@ -72,7 +75,7 @@ def format_return(board: list) -> str:
 
 
 def print_out(board: list) -> print:
-    print(" ".join([chr(i+97) for i in range(len(board))]))
+    print(" ".join([chr(i%26+97) for i in range(len(board))]))
     for i in range(len(board)):
         for j in range(len(board)):
             if board[i][j] == 0: board[i][j] = EMPTY_CHAR
@@ -83,3 +86,4 @@ def print_out(board: list) -> print:
 
 if __name__ == "__main__":
     print(main())
+ 

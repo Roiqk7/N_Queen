@@ -1,4 +1,4 @@
 # N_Queens
-This is backtracking algorithm which solves N queens problem.
-I would not recomend going beyond N = 22, which is also hardcoded as upper bound. The algorithm is very slow and I am open for recomendations.
-Please note that if you want to to enter starting position use chesboard format meaning top left position is 'a1' and top right is up to 'zN'.
+Solving N queen problem using backtracking algorithm. 
+Layout of the board is chess-like and input for starting queen position needs to follow chess-like format e.g. "a1", "c7"...
+Complexity of both python a c algorithms is O(n!). 

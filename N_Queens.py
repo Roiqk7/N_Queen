@@ -19,7 +19,6 @@ queen_positions = []
 QUEEN_CHAR = "Q"
 EMPTY_CHAR = "."
 
-
 def queens(position: str, size: int) -> str:
     start = default_timer()
     board = [[0 for i in range(size)] for i in range(size)]
@@ -29,7 +28,7 @@ def queens(position: str, size: int) -> str:
         board[row][col] = 1
     if solve_N_queens(board, 0):
         run_time = default_timer() - start
-        print(f"{run_time:.3f}s")
+        print(f"\n{run_time:.3f}s")
         print_out(board)
         queen_positions.clear()
         return format_return(board)
@@ -86,4 +85,3 @@ def print_out(board: list) -> print:
 
 if __name__ == "__main__":
     print(main())
- 

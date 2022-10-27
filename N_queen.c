@@ -1,6 +1,8 @@
 //  time complexity: O(n!)
 //  solution to n queen problem using backtracking algorithm
 
+
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -14,10 +16,11 @@ const int QUEEN_NUM = 1;
 const int EMPTY_NUM = 0;
 
 
-int NQmain(char *pos, int n);
-bool solve_N_queen(int row, int n, int board[n][n]);
-void returnf(int n, int board[n][n]);
-void print_out(int n, int board[n][n]);
+int assignPos(char *pos, int n, int board[n][n]);
+int NQmain(int n, int board[n][n]);
+bool solveNQueen(int row, int n, int board[n][n]);
+bool isValid(int row, int col, int n, int board[n][n]);
+void printOut(int n, int board[n][n]);
 
 
 int main(void)
@@ -28,32 +31,57 @@ int main(void)
         if (pos == NULL) return 1;
         printf("\nEnter N: ");  
         scanf("%d", &n);
+        int board[n][n];
+        memset(board, EMPTY_NUM, sizeof(board));
+        printOut(n, board);
         while (strcmp(pos, "x") != 0) {
-            printf("(press x to assign new N value)\nEnter starting position of the Queen: ");  
+            printf("(press [x] to reassign N value | press [w] to edit queen positions)\nEnter starting position of the Queen: ");  
             scanf("%s", pos);
-            NQmain(pos, n);
+            if (strcmp(pos, "w") == 0) {
+                memset(board, EMPTY_NUM, sizeof(board));
+                printOut(n, board);
+                while (strcmp(pos, "x") != 0) {
+                printf("(press [x] to finish | press [z] to clear board)\nEnter position of the Queen: ");  
+                scanf("%s", pos);
+                if (strcmp(pos, "z") == 0) memset(board, EMPTY_NUM, sizeof(board));
+                printf("\n\n");
+                assignPos(pos, n, board);
+                printOut(n, board);
+                }
+            }
+            else {
+                memset(board, EMPTY_NUM, sizeof(board));
+                assignPos(pos, n, board);
+            }
+            NQmain(n, board);
         }
     }
 }
 
 
-int NQmain(char *pos, int n) 
+int assignPos(char *pos, int n, int board[n][n])
 {
-    clock_t t = clock();
-    int board[n][n];
-    memset(board, EMPTY_NUM, sizeof(board));
     int col = pos[0] - 97; 
     pos++;
     int pos_num = atoi(pos);
-    if (pos_num == 0) return 0;
+    if (pos_num == 0) return 1;
     int row = n - pos_num;
-    board[row][col] = QUEEN_NUM;
-    if (solve_N_queen(0, n, board)) {
+    if (isValid(row, col, n, board)) {
+        board[row][col] = QUEEN_NUM;
+        return 0;
+    }
+    return 1;
+}
+
+
+int NQmain(int n, int board[n][n]) 
+{
+    clock_t t = clock();
+    if (solveNQueen(0, n, board)) {
         t = clock() - t;
         double run_time = (double)t/CLOCKS_PER_SEC;
-        printf("\nFinished in %.3fs\n", run_time);
-        print_out(n, board);
-        returnf(n, board);
+        printf("\n\n\nFinished in %.3fs\n", run_time);
+        printOut(n, board);
         return 0;
     }
     printf("No solutions found.\n");
@@ -61,7 +89,7 @@ int NQmain(char *pos, int n)
 }
 
 
-bool is_valid(int row, int col, int n, int board[n][n])
+bool isValid(int row, int col, int n, int board[n][n])
 {
     for (int i = 0; i < n; i++) if (board[row][i] == QUEEN_NUM) return false; 
     for (int i = 0; i < n; i++) if (board[i][col] == QUEEN_NUM) return false;
@@ -76,14 +104,14 @@ bool is_valid(int row, int col, int n, int board[n][n])
 }
 
 
-bool solve_N_queen(int row, int n, int board[n][n])
+bool solveNQueen(int row, int n, int board[n][n])
 {
     if (row == n) return true;
-    for (int i = 0; i < n; i++) if (board[row][i] == QUEEN_NUM) return solve_N_queen(row+1, n, board);
+    for (int i = 0; i < n; i++) if (board[row][i] == QUEEN_NUM) return solveNQueen(row+1, n, board);
     for (int i = 0; i < n; i++) {
-        if (is_valid(row, i, n, board)) {
+        if (isValid(row, i, n, board)) {
             board[row][i] = QUEEN_NUM;
-            if (solve_N_queen(row+1, n, board)) return true;
+            if (solveNQueen(row+1, n, board)) return true;
         }
         board[row][i] = EMPTY_NUM;
     }
@@ -96,15 +124,19 @@ void returnf(int n, int board[n][n])
     int count = 0;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {   
-            if (board[j][i] == QUEEN_NUM) printf("%c%i, ", 'a' + i%26, n - j), count++;
+            if (board[j][i] == QUEEN_NUM) {
+                printf("%c%i", 'a' + i%26, n - j);
+                count++;
+                if (count != n) printf(", ");
+            }
         }
-        if (count % (n/2) == 0) printf("\n");
+        if (count % (n/2) == 0 && count > 0) printf("\n");
     }
     printf("\n\n");
 }
 
 
-void print_out(int n, int board[n][n])
+void printOut(int n, int board[n][n])
 {
     for (int i = 0; i < n; i++) printf("%c ", 'a' + i%26);
     printf("\n");
@@ -115,4 +147,5 @@ void print_out(int n, int board[n][n])
         }
         printf("|%i\n", n - i);
     }
+    returnf(n, board);
 }

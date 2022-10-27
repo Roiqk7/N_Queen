@@ -96,7 +96,7 @@ void returnf(int n, int board[n][n])
     int count = 0;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {   
-            if (board[j][i] == QUEEN_NUM) printf("%c%i, ", i + 97, n - j), count++;
+            if (board[j][i] == QUEEN_NUM) printf("%c%i, ", 'a' + i%26, n - j), count++;
         }
         if (count % (n/2) == 0) printf("\n");
     }

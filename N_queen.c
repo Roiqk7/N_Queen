@@ -34,9 +34,10 @@ int main(void)
         int board[n][n];
         memset(board, EMPTY_NUM, sizeof(board));
         printOut(n, board);
-        while (strcmp(pos, "x") != 0) {
+        while (true) {
             printf("(press [x] to reassign N value | press [w] to edit queen positions)\nEnter starting position of the Queen: ");  
             scanf("%s", pos);
+            if (strcmp(pos, "x") == 0) break;
             if (strcmp(pos, "w") == 0) {
                 memset(board, EMPTY_NUM, sizeof(board));
                 printOut(n, board);

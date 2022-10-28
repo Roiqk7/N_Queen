@@ -92,7 +92,6 @@ int NQmain(int n, int board[n][n])
 
 bool isValid(int row, int col, int n, int board[n][n])
 {
-    for (int i = 0; i < n; i++) if (board[row][i] == QUEEN_NUM) return false; 
     for (int i = 0; i < n; i++) if (board[i][col] == QUEEN_NUM) return false;
     for (int i = 0; i < n; i++) { 
         for (int j = 0; j < n; j++) {

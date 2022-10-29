@@ -14,15 +14,18 @@ const char QUEEN_CHAR = 'Q';
 const char EMPTY_CHAR = '.';
 const int QUEEN_NUM = 1;
 const int EMPTY_NUM = 0;
-double timeSum;
-double timeLen;
 
 
 int assignPos(char *pos, int n, int board[n][n]);
+void getAnalysis(int n);
 int NQmain(int n, int board[n][n]);
 bool solveNQueen(int row, int n, int board[n][n]);
 bool isValid(int row, int col, int n, int board[n][n]);
 void printOut(int n, int board[n][n]);
+
+
+double timeSum;
+int timeLen;
 
 
 int main(void)
@@ -38,19 +41,20 @@ int main(void)
         memset(board, EMPTY_NUM, sizeof(board));
         printOut(n, board);
         while (true) {
-            printf("(press [x] to reassign N value | press [w] to edit queen positions)\nEnter starting position of the Queen: ");  
+            printf("([x] reassign N value | [w] edit queen positions | [a] analysis)\nEnter starting position of the Queen: ");  
             scanf("%s", pos);
             if (strcmp(pos, "x") == 0) break;
+            if (strcmp(pos, "a") == 0) getAnalysis(n);
             if (strcmp(pos, "w") == 0) {
                 memset(board, EMPTY_NUM, sizeof(board));
                 printOut(n, board);
                 while (strcmp(pos, "x") != 0) {
-                printf("(press [x] to finish | press [z] to clear board)\nEnter position of the Queen: ");  
-                scanf("%s", pos);
-                if (strcmp(pos, "z") == 0) memset(board, EMPTY_NUM, sizeof(board));
-                printf("\n\n");
-                assignPos(pos, n, board);
-                printOut(n, board);
+                    printf("(press [x] to finish | press [z] to clear board)\nEnter position of the Queen: ");  
+                    scanf("%s", pos);
+                    if (strcmp(pos, "z") == 0) memset(board, EMPTY_NUM, sizeof(board));
+                    printf("\n\n");
+                    assignPos(pos, n, board);
+                    printOut(n, board);
                 }
             }
             else {
@@ -58,6 +62,20 @@ int main(void)
                 assignPos(pos, n, board);
             }
             NQmain(n, board);
+        }
+    }
+}
+
+
+void getAnalysis(int n)
+{
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            int board[n][n];
+            memset(board, EMPTY_NUM, sizeof(board));
+            board[i][j] = QUEEN_NUM;
+            NQmain(n, board);
+            printf("Valid solutions found: %i", timeLen);
         }
     }
 }
@@ -91,7 +109,7 @@ int NQmain(int n, int board[n][n])
         printOut(n, board);
         return 0;
     }
-    printf("No solutions found.\n");
+    printf("\nNo solutions found.\n");
     return 0;
 }
 

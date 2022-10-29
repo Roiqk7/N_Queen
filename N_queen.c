@@ -14,6 +14,8 @@ const char QUEEN_CHAR = 'Q';
 const char EMPTY_CHAR = '.';
 const int QUEEN_NUM = 1;
 const int EMPTY_NUM = 0;
+double timeSum;
+double timeLen;
 
 
 int assignPos(char *pos, int n, int board[n][n]);
@@ -27,6 +29,7 @@ int main(void)
 {
     while (true) {
         int n;
+        timeSum = timeLen = 0.0;
         char *pos = malloc(5);  
         if (pos == NULL) return 1;
         printf("\nEnter N: ");  
@@ -80,8 +83,11 @@ int NQmain(int n, int board[n][n])
     clock_t t = clock();
     if (solveNQueen(0, n, board)) {
         t = clock() - t;
-        double run_time = (double)t/CLOCKS_PER_SEC;
+        double run_time = (double) t/CLOCKS_PER_SEC;
+        timeSum += run_time;
+        timeLen += 1;
         printf("\n\n\nFinished in %.3fs\n", run_time);
+        printf("Average runtime is %.6fs\n", timeSum/timeLen);
         printOut(n, board);
         return 0;
     }

@@ -19,7 +19,7 @@ using System;
                 string pos = System.String.Empty;
                 Console.Write("Enter N: ");
                 int n = Convert.ToInt32(Console.ReadLine());
-                Console.Write("(optional) Enter starting position of the Queen: ");
+                Console.Write("Enter starting position of the Queen: ");
                 pos = Console.ReadLine();
                 int[,] board = new int[n, n];
                 assignPos(pos, n, board);

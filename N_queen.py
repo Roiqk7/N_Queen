@@ -1,12 +1,21 @@
 from timeit import default_timer
 
+
+times = []
+QUEEN_CHAR = "Q"
+EMPTY_CHAR = "."
+
+
 def main():
     while True:
         try:
             n = int(input("Enter N: ").replace(" ", ""))
-            start_pos = input("(optional) Enter starting position of the Queen: ").replace(" ", "").lower()
-            print(queens(start_pos, n))
-            print("\n")
+            times.clear()
+            start_pos = " "
+            while start_pos != "x" or start_pos != "":
+                start_pos = input("(press [x] to reassign N) Enter position of the Queen: ").replace(" ", "").lower()
+                print(queens(start_pos, n))
+                print("\n")
         except ValueError:
             print("Value error. If you are unsure about entry format read `README.md`.")
             continue
@@ -16,8 +25,7 @@ def main():
 
 
 queen_positions = []
-QUEEN_CHAR = "Q"
-EMPTY_CHAR = "."
+
 
 def queens(position: str, size: int) -> str:
     start = default_timer()
@@ -28,7 +36,9 @@ def queens(position: str, size: int) -> str:
         board[row][col] = 1
     if solve_N_queens(board, 0):
         run_time = default_timer() - start
-        print(f"\n{run_time:.3f}s")
+        times.append(run_time)
+        print(f"\nFinihed in {run_time:.3f}s")
+        print("Time average: " + str(sum(times)/len(times)))
         print_out(board)
         queen_positions.clear()
         return format_return(board)

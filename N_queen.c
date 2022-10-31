@@ -107,6 +107,7 @@ int editMode(int n, int board[n][n])
     return SUCCESS;
 }
 
+
 //  puts queen on every position and keeps track of time
 int analysisMode (int n, int board[n][n])
 {   
@@ -235,16 +236,6 @@ double stopwatch(void)
 }
 
 
-//TODO
-//  formats time in seconds into desired format
-//  showed acuracy -> how accurate the return should be eg(showedAccuracy=1, 1min; showedAccuracy=3, 1min 43secs 872ms)
-char *formatTime(int seconds, int showedAccuracy)
-{
-    //TODO https://www.codewars.com/kata/52742f58faf5485cae000b9a/solutions/c
-    return "1min 43sec 21ms";
-}
-
-
 /*
        ###    ##        ######    #######  ########  #### ######## ##     ## ##     ##  ######  
       ## ##   ##       ##    ##  ##     ## ##     ##  ##     ##    ##     ## ###   ### ##    ## 
@@ -286,6 +277,7 @@ bool isValid(int row, int col, int n, int board[n][n])
     }
     return true;
 }
+
 
 //  time complexity: O(n!)
 //  solves N Queen using backtracking algorithm

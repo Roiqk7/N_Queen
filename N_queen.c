@@ -147,14 +147,12 @@ int getUserInput(int mode, int n, int board[n][n])
     {
         case HOME_MODE_NUM:         //  home
             printf("([x] reassign N value | [w] edit mode | [a] analysis mode)");
-            if (n < 27) printf("\n(eg 'a1') Enter starting position of the Queen: "); 
-            else printf("\n(eg '37 11') Enter starting position of the Queen: "); 
+            printf("\n(eg 'a1') Enter starting position of the Queen: "); 
             scanf("%s", userInput);
             break;
         case EDIT_MODE_NUM:         //  edit mode
             printf("([x] to finish | [z] to clear board)");  
-            if (n < 27) printf("\n(edit mode) (eg 'a1') Enter starting position of the Queen: "); 
-            else printf("\n(edit mode) (eg '37 11') Enter starting position of the Queen: "); 
+            printf("\n(edit mode) (eg 'a1') Enter starting position of the Queen: "); 
             scanf("%s", userInput);
             break;
         case ANALYSIS_MODE_NUM:     //  analysis mode
@@ -186,18 +184,11 @@ void assignPos(char *userInput, int mode, int n, int board[n][n])
 {
     int row, col, posNum;
     if (mode == HOME_MODE_NUM) memset(board, EMPTY_NUM, n*sizeof(*board)); 
-    if (n < 27) {                 //  checks if alphabetical or numberical marking should be used
-        col = userInput[0] - 'a'; 
-        userInput++;
-        posNum = atoi(userInput);
-        if (posNum == 0) return;
-        row = n - posNum;
-    } 
-    else {
-        col = atoi(userInput);
-        userInput += 2;
-        row = atoi(userInput);
-    } 
+    col = userInput[0] - 'a'; 
+    userInput++;
+    posNum = atoi(userInput);
+    if (posNum == 0) return;
+    row = n - posNum;
     if (isValid(row, col, n, board)) {
         board[row][col] = QUEEN_NUM;
         return;

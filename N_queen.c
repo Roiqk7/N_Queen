@@ -1,10 +1,5 @@
-// important!!! in progress
-
-
 //  solution to n queen problem using backtracking algorithm
-
-
-//TODO make formatAnalysis and show different data 
+//  if you notice any grammar issues, please notify me
 
 
 #include <ctype.h>
@@ -14,6 +9,9 @@
 #include <string.h>
 #include <time.h>
 
+//  return values for functions
+#define ERROR_OCCURED -1
+#define SUCCESS 0
 
 //  _NUM are representatives in 2d array 'board' 
 //  _CHAR are used in printOut for better visual
@@ -22,11 +20,8 @@ const char EMPTY_CHAR = '.';
 const int QUEEN_NUM = 1;
 const int EMPTY_NUM = 0;
 
-//return values for functions
+//  used for communication between user, functions and the rest of the program
 // _NUM and _CHAR represent corresponding modes
-const int ERROR_OCCURED = -1;
-const int SUCCESS = 0;
-
 const int HOME_MODE_NUM = 1;
 const int EDIT_MODE_NUM = 2;
 const int CLEAR_BOARD_NUM = 21;
@@ -36,8 +31,10 @@ const char HOME_MODE_CHAR = 'x';
 const char EDIT_MODE_CHAR = 'w';
 const char CLEAR_BOARD_CHAR = 'z';
 const char ANALYSIS_MODE_CHAR = 'a';
-
-
+                                                                        //  Quick summary:
+int homeMode(int n, int board[n][n]);                                   //  main hub for user
+int editMode(int n, int board[n][n]);                                   //  lets the user create custom puzzles  
+int analysisMode (int n, int board[n][n]);                              //  returns analysis of the puzzle for certain N
 int getUserInput(int mode, int n, int board[n][n]);                     //  gets user input properly 
 void assignPos(char *userInput, int mode, int n, int board[n][n]);      //  places queen based on user input
 void getAnalysis(int n);                                                //  makes analysis if user enters analysis mode
@@ -51,48 +48,79 @@ void printOut(int n, int board[n][n]);                                  //  prin
 double timeSum;
 int timeLen;
 
-
-                                                            
+                                           
 int main(void)
 {  
-    while (true) {                                          //  main loop for keeping the program going
-        int n, input;
-        timeSum = timeLen = 0.0;                            //  resets timeSum and Len at 0 to prevent inconvenient output        
+    int n, input;
+    while (true) {                                                          //  main loop for keeping the program going
+        timeSum = timeLen = 0.0;                                            //  resets value of time variables
         printf("\nEnter N: ");  
         scanf("%d", &n);
-        int board[n][n];                                    //  board is most important variable which stores THE BOARD!
+        int board[n][n];                                                    //  board is most important variable which stores THE BOARD!
         memset(board, EMPTY_NUM, sizeof(board));        
         printOut(n, board);                                     
-        while (true) {                                      //  after user inputs N -> user enters home mode
-            input = getUserInput(1, n, board);
-            if (input == HOME_MODE_NUM) break;              //  returns user back to home mode
-            switch (input) {
-                case ERROR_OCCURED:                             //  closes the program if malloc() returns NULL
-                    return ERROR_OCCURED;
-                case SUCCESS:                                   //  solves the position 
-                    NQmain(n, board);
-                    break;
-                case EDIT_MODE_NUM:                             //  user entered edit mode
-                    memset(board, EMPTY_NUM, sizeof(board));
-                    printOut(n, board);
-                    while (true) {
-                        input = getUserInput(EDIT_MODE_NUM, n, board);
-                        if (input == ERROR_OCCURED) return ERROR_OCCURED;
-                        if (input == HOME_MODE_NUM) break;               
-                        if (input == CLEAR_BOARD_NUM) memset(board, EMPTY_NUM, sizeof(board));
-                        printf("\n\n");
-                        printOut(n, board);
-                    }
-                    NQmain(n, board);
-                    break;
-                case ANALYSIS_MODE_NUM:                         //  user entered analysis mode
-                    getAnalysis(n);
-                    break;
-                default:
-                    return main();                              //  resets the program by default
-            }
-        } 
+        if (homeMode(n, board) == ERROR_OCCURED) return ERROR_OCCURED;      //  after user inputs N -> user enters home mode
     }
+}
+
+
+// main hub from which user can explore functionality of thi programe
+int homeMode(int n, int board[n][n])
+{
+    while (true) {                                      
+        int input = getUserInput(1, n, board);
+        if (input == HOME_MODE_NUM) break;                                      //  returns user back to home mode
+        switch (input) {
+            case ERROR_OCCURED:                                                 //  closes the program if malloc() returns NULL
+                return ERROR_OCCURED;
+            case SUCCESS:                                                       //  solves the position 
+                NQmain(n, board);
+                break;
+            case EDIT_MODE_NUM:                                                 //  user entered edit mode
+                if (editMode(n, board) == ERROR_OCCURED) return ERROR_OCCURED;  
+                break;
+            case ANALYSIS_MODE_NUM:                                             //  user entered analysis mode
+                if (analysisMode(n, board) == ERROR_OCCURED) return ERROR_OCCURED;  
+                break;
+            default:
+                return main();                                                  //  resets the program by default
+        }
+    }
+    return SUCCESS;
+}
+
+
+//  user gets chance to create uniqie positions and find out their solution
+int editMode(int n, int board[n][n])
+{
+    memset(board, EMPTY_NUM, n*sizeof(*board));
+    printOut(n, board);
+    while (true) {
+        int input = getUserInput(EDIT_MODE_NUM, n, board);
+        if (input == ERROR_OCCURED) return ERROR_OCCURED;
+        if (input == HOME_MODE_NUM) break;               
+        if (input == CLEAR_BOARD_NUM) memset(board, EMPTY_NUM, n*sizeof(*board));
+        printf("\n\n");
+        printOut(n, board);
+    }
+    NQmain(n, board);
+    return SUCCESS;
+}
+
+//  puts queen on every position and keeps track of time
+int analysisMode (int n, int board[n][n])
+{   
+    timeSum = timeLen = 0.0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            int board[n][n];
+            memset(board, EMPTY_NUM, sizeof(board));
+            board[i][j] = QUEEN_NUM;
+            NQmain(n, board);
+            printf("Valid solutions found: %i\n", timeLen);
+        }
+    }
+    return SUCCESS;
 }
 
 
@@ -116,22 +144,22 @@ int getUserInput(int mode, int n, int board[n][n])
     if (userInput == NULL) return ERROR_OCCURED;     
     switch (mode)
     {
-    case HOME_MODE_NUM:         //  home
-        printf("([x] reassign N value | [w] edit mode | [a] analysis mode)");
-        if (n < 27) printf("\n(eg 'a1') Enter starting position of the Queen: "); 
-        else printf("\n(eg '37 11') Enter starting position of the Queen: "); 
-        scanf("%s", userInput);
-        break;
-    case EDIT_MODE_NUM:         //  edit mode
-        printf("([x] to finish | [z] to clear board)");  
-        if (n < 27) printf("\n(edit mode) (eg 'a1') Enter starting position of the Queen: "); 
-        else printf("\n(edit mode) (eg '37 11') Enter starting position of the Queen: "); 
-        scanf("%s", userInput);
-        break;
-    case ANALYSIS_MODE_NUM:     //  analysis mode
-        return ANALYSIS_MODE_NUM;
-    default:
-        return getUserInput(mode, n, board);
+        case HOME_MODE_NUM:         //  home
+            printf("([x] reassign N value | [w] edit mode | [a] analysis mode)");
+            if (n < 27) printf("\n(eg 'a1') Enter starting position of the Queen: "); 
+            else printf("\n(eg '37 11') Enter starting position of the Queen: "); 
+            scanf("%s", userInput);
+            break;
+        case EDIT_MODE_NUM:         //  edit mode
+            printf("([x] to finish | [z] to clear board)");  
+            if (n < 27) printf("\n(edit mode) (eg 'a1') Enter starting position of the Queen: "); 
+            else printf("\n(edit mode) (eg '37 11') Enter starting position of the Queen: "); 
+            scanf("%s", userInput);
+            break;
+        case ANALYSIS_MODE_NUM:     //  analysis mode
+            return ANALYSIS_MODE_NUM;
+        default:
+            return getUserInput(mode, n, board);
     }
     if (strlen(userInput) == 1) {           //user typed in only 1 letter 
         switch (userInput[0]) {
@@ -196,7 +224,7 @@ double stopwatch(void)
     if (state == 0) {
         state = 1;
         t = clock();
-        return -1.0;
+        return 0;
     }
     state = 0;
     t = clock() - t;
@@ -214,82 +242,6 @@ char *formatTime(int seconds, int showedAccuracy)
 {
     //TODO https://www.codewars.com/kata/52742f58faf5485cae000b9a/solutions/c
     return "1min 43sec 21ms";
-}
-
-
-/*  
-    ##     ##    ###    ##    ## ########  ##       ########       ###    ##    ##    ###    ##       ##    ##  ######  ####  ######  
-    ##     ##   ## ##   ###   ## ##     ## ##       ##            ## ##   ###   ##   ## ##   ##        ##  ##  ##    ##  ##  ##    ## 
-    ##     ##  ##   ##  ####  ## ##     ## ##       ##           ##   ##  ####  ##  ##   ##  ##         ####   ##        ##  ##       
-    ######### ##     ## ## ## ## ##     ## ##       ######      ##     ## ## ## ## ##     ## ##          ##     ######   ##   ######  
-    ##     ## ######### ##  #### ##     ## ##       ##          ######### ##  #### ######### ##          ##          ##  ##        ## 
-    ##     ## ##     ## ##   ### ##     ## ##       ##          ##     ## ##   ### ##     ## ##          ##    ##    ##  ##  ##    ## 
-    ##     ## ##     ## ##    ## ########  ######## ########    ##     ## ##    ## ##     ## ########    ##     ######  ####  ######  
-
-*/                                                                                                     
-
-
-/*
-/user entered analysis mode
-
-/table while performing analysis
-
-+-------------------------------------+
-|    ANALYSIS IN PROCESS FOR  15N     |
-|            FINISHED: 20             |
-|            LEFT: 180                |
-+-------------------------------------+
-
-
-+-------------------------------------+
-|   A N A L Y S I S   F O R    20 N   |
-+-------------------------------------+
-|   T O T A L:   12min 12sec 821ms   |         <--- show 3 most significant times 
-+-------------------------------------+
-|     A V E R A G E:  12sec 123ms     |         | make time converter with smart functions -> human readable time kata
-+-------------------------------------+
-| SLOWEST STARTING POSITION: a8 43sec |         <--- round up to most significant 
-| FASTEST STARTING POSITION: f1 123ms |  
-+-------------------------------------+ 
-|  1150% INCREASE FROM LAST ANALYSIS  |          <--- dont forget the decrease
-+-------------------------------------+
-|           H I S T O R Y:            |
-|   N       TOTAL         AVERAGE     |
-|  10     1min 12sec      11s 7812ms  |          <--- dont sort it! 
-|   5     2sec 123ms           123ms  |           | show only 2 most significant times   
-|  30    27min 45sec     3min 28 sec  |      
-|   1            0ms             0ms  |      
-+-------------------------------------+
-([x] exit analysis mode)
-(analysis mode) Enter N:
-...
-
-/after finished analysis user can continue in analysis mode or leave
-
-*/
-
-
-//  returns analysis in desired format
-void formatAnalysis(void)
-{
-    //TODO
-}
-
-
-//  puts queen on every position and keeps track of time
-void getAnalysis(int n)
-{
-    timeSum = timeLen = 0.0;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            int board[n][n];
-            memset(board, EMPTY_NUM, sizeof(board));
-            board[i][j] = QUEEN_NUM;
-            NQmain(n, board);
-            printf("Valid solutions found: %i\n", timeLen);
-        }
-    }
-    formatAnalysis();
 }
 
 
@@ -336,7 +288,7 @@ bool isValid(int row, int col, int n, int board[n][n])
 }
 
 //  time complexity: O(n!)
-//  solve the puzzle using backtracking algorithm
+//  solves N Queen using backtracking algorithm
 bool solveNQueen(int row, int n, int board[n][n])
 {
     if (row == n) return true;

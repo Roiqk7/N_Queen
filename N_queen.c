@@ -36,7 +36,7 @@ int homeMode(int n, int board[n][n]);                                   //  main
 int editMode(int n, int board[n][n]);                                   //  lets the user create custom puzzles  
 int analysisMode (int n, int board[n][n]);                              //  returns analysis of the puzzle for certain N
 int getUserInput(int mode, int n, int board[n][n]);                     //  gets user input properly 
-void assignPos(char *userInput, int mode, int n, int board[n][n]);      //  places queen based on user input
+void assignQueen(char *userInput, int mode, int n, int board[n][n]);      //  places queen based on user input
 void getAnalysis(int n);                                                //  makes analysis if user enters analysis mode
 int NQmain(int n, int board[n][n]);                                     //  handles functions in order to solve and return the puzzle
 bool solveNQueen(int row, int n, int board[n][n]);                      //  solves the puzzle
@@ -137,7 +137,7 @@ int analysisMode (int n, int board[n][n])
 */
 
 
-//  gets input from user and hands it to assignPos() function
+//  gets input from user and hands it to assignQueen() function
 int getUserInput(int mode, int n, int board[n][n])
 {
     char *userInput = malloc(5); 
@@ -175,13 +175,13 @@ int getUserInput(int mode, int n, int board[n][n])
                 return getUserInput(mode, n, board);
         }
     }
-    assignPos(userInput, mode, n, board);
+    assignQueen(userInput, mode, n, board);
     return SUCCESS;
 }
 
 
 //  transfers user input into usable format and places queen on desired position if its valid
-void assignPos(char *userInput, int mode, int n, int board[n][n])
+void assignQueen(char *userInput, int mode, int n, int board[n][n])
 {
     int row, col, posNum;
     if (mode == HOME_MODE_NUM) memset(board, EMPTY_NUM, n*sizeof(*board)); 

@@ -1,5 +1,5 @@
 //  solution to n queen problem using backtracking algorithm
-//  if you notice any grammar issues, please notify me
+// if you notice any grammar issues, please notify me
 
 
 #include <ctype.h>
@@ -64,7 +64,7 @@ int main(void)
 }
 
 
-// main hub from which user can explore functionality of thi programe
+// main hub from which user can explore functionality of thi program
 int homeMode(int n, int board[n][n])
 {
     while (true) {                                      
@@ -90,7 +90,7 @@ int homeMode(int n, int board[n][n])
 }
 
 
-//  user gets chance to create uniqie positions and find out their solution
+//  user gets chance to create unique positions and find out their solution
 int editMode(int n, int board[n][n])
 {
     memset(board, EMPTY_NUM, n*sizeof(*board));
@@ -106,7 +106,6 @@ int editMode(int n, int board[n][n])
     NQmain(n, board);
     return SUCCESS;
 }
-
 
 //  puts queen on every position and keeps track of time
 int analysisMode (int n, int board[n][n])
@@ -147,12 +146,14 @@ int getUserInput(int mode, int n, int board[n][n])
     {
         case HOME_MODE_NUM:         //  home
             printf("([x] reassign N value | [w] edit mode | [a] analysis mode)");
-            printf("\n(eg 'a1') Enter starting position of the Queen: "); 
+            if (n < 27) printf("\n(eg 'a1') Enter starting position of the Queen: "); 
+            else printf("\n(eg '37 11') Enter starting position of the Queen: "); 
             scanf("%s", userInput);
             break;
         case EDIT_MODE_NUM:         //  edit mode
             printf("([x] to finish | [z] to clear board)");  
-            printf("\n(edit mode) (eg 'a1') Enter starting position of the Queen: "); 
+            if (n < 27) printf("\n(edit mode) (eg 'a1') Enter starting position of the Queen: "); 
+            else printf("\n(edit mode) (eg '37 11') Enter starting position of the Queen: "); 
             scanf("%s", userInput);
             break;
         case ANALYSIS_MODE_NUM:     //  analysis mode
@@ -184,11 +185,18 @@ void assignPos(char *userInput, int mode, int n, int board[n][n])
 {
     int row, col, posNum;
     if (mode == HOME_MODE_NUM) memset(board, EMPTY_NUM, n*sizeof(*board)); 
-    col = userInput[0] - 'a'; 
-    userInput++;
-    posNum = atoi(userInput);
-    if (posNum == 0) return;
-    row = n - posNum;
+    if (n < 27) {                 //  checks if alphabetical or numerical marking should be used
+        col = userInput[0] - 'a'; 
+        userInput++;
+        posNum = atoi(userInput);
+        if (posNum == 0) return;
+        row = n - posNum;
+    } 
+    else {
+        col = atoi(userInput);
+        userInput += 2;
+        row = atoi(userInput);
+    } 
     if (isValid(row, col, n, board)) {
         board[row][col] = QUEEN_NUM;
         return;
@@ -224,6 +232,16 @@ double stopwatch(void)
     timeSum += run_time;                //  adds times to timeSum and timeLen so time average can be easily calculated
     timeLen += 1;
     return run_time;
+}
+
+
+//TODO
+//  formats time in seconds into desired format
+//  showed accuracy -> how accurate the return should be eg(showedAccuracy=1, 1min; showedAccuracy=3, 1min 43secs 872ms)
+char *formatTime(int seconds, int showedAccuracy)
+{
+    //TODO https://www.codewars.com/kata/52742f58faf5485cae000b9a/solutions/c
+    return "1min 43sec 21ms";
 }
 
 
@@ -269,7 +287,6 @@ bool isValid(int row, int col, int n, int board[n][n])
     return true;
 }
 
-
 //  time complexity: O(n!)
 //  solves N Queen using backtracking algorithm
 bool solveNQueen(int row, int n, int board[n][n])
@@ -299,7 +316,7 @@ bool solveNQueen(int row, int n, int board[n][n])
 
 
 //  gets called by printOut if n < 27 else its not called since it may be too distracting
-//  returns Queen poitions in chess-like format eg("a2, b4, c1, d3") 
+//  returns Queen positions in chess-like format eg("a2, b4, c1, d3") 
 //  also automaticaly sorts the output based on columns
 void returnf(int n, int board[n][n])
 {   

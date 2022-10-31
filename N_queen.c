@@ -10,7 +10,7 @@
 #include <time.h>
 
 //  return values for functions
-#define ERROR_OCCURED -1
+#define ERROR_OCCURRED -1
 #define SUCCESS 0
 
 //  _NUM are representatives in 2d array 'board' 
@@ -59,7 +59,7 @@ int main(void)
         int board[n][n];                                                    //  board is most important variable which stores THE BOARD!
         memset(board, EMPTY_NUM, sizeof(board));        
         printOut(n, board);                                     
-        if (homeMode(n, board) == ERROR_OCCURED) return ERROR_OCCURED;      //  after user inputs N -> user enters home mode
+        if (homeMode(n, board) == ERROR_OCCURRED) return ERROR_OCCURRED;      //  after user inputs N -> user enters home mode
     }
 }
 
@@ -71,16 +71,16 @@ int homeMode(int n, int board[n][n])
         int input = getUserInput(1, n, board);
         if (input == HOME_MODE_NUM) break;                                      //  returns user back to home mode
         switch (input) {
-            case ERROR_OCCURED:                                                 //  closes the program if malloc() returns NULL
-                return ERROR_OCCURED;
+            case ERROR_OCCURRED:                                                 //  closes the program if malloc() returns NULL
+                return ERROR_OCCURRED;
             case SUCCESS:                                                       //  solves the position 
                 NQmain(n, board);
                 break;
             case EDIT_MODE_NUM:                                                 //  user entered edit mode
-                if (editMode(n, board) == ERROR_OCCURED) return ERROR_OCCURED;  
+                if (editMode(n, board) == ERROR_OCCURRED) return ERROR_OCCURRED;  
                 break;
             case ANALYSIS_MODE_NUM:                                             //  user entered analysis mode
-                if (analysisMode(n, board) == ERROR_OCCURED) return ERROR_OCCURED;  
+                if (analysisMode(n, board) == ERROR_OCCURRED) return ERROR_OCCURRED;  
                 break;
             default:
                 return main();                                                  //  resets the program by default
@@ -97,7 +97,7 @@ int editMode(int n, int board[n][n])
     printOut(n, board);
     while (true) {
         int input = getUserInput(EDIT_MODE_NUM, n, board);
-        if (input == ERROR_OCCURED) return ERROR_OCCURED;
+        if (input == ERROR_OCCURRED) return ERROR_OCCURRED;
         if (input == HOME_MODE_NUM) break;               
         if (input == CLEAR_BOARD_NUM) memset(board, EMPTY_NUM, n*sizeof(*board));
         printf("\n\n");
@@ -142,7 +142,7 @@ int analysisMode (int n, int board[n][n])
 int getUserInput(int mode, int n, int board[n][n])
 {
     char *userInput = malloc(5); 
-    if (userInput == NULL) return ERROR_OCCURED;     
+    if (userInput == NULL) return ERROR_OCCURRED;     
     switch (mode)
     {
         case HOME_MODE_NUM:         //  home

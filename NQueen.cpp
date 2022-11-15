@@ -54,8 +54,8 @@ class Board {
 
         Board() {
             map = {{EMPTY_NUM}};
-            if (!whiteQueenTexture.loadFromFile("/Users/roiqk/Desktop/Programming/C:C++/C++/NumeroDuo/Assets/whiteQueen.png")) std::exit(0);
-            if (!blackQueenTexture.loadFromFile("/Users/roiqk/Desktop/Programming/C:C++/C++/NumeroDuo/Assets/blackQueen.png")) std::exit(0);
+            if (!whiteQueenTexture.loadFromFile("path to /whiteQueen.png")) std::exit(0);
+            if (!blackQueenTexture.loadFromFile("path to /blackQueen.png")) std::exit(0);
         }
 
         //  draws the bard

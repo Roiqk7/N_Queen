@@ -1,7 +1,6 @@
 // * g++ -std=c++17 NQueen.cpp -o NQueen -I/Users/roiqk/SFML/include -L/Users/roiqk/SFML/build/lib  -lsfml-graphics -lsfml-window -lsfml-system
 
 
-
 //  this program visualizes backtracking algorithm solving N Queens problem
 
 #include <array>        
@@ -10,14 +9,14 @@
 #include <SFML/Graphics.hpp>
 
 //  map related -> base N = 8; TILE_SIZE = 100 
-//eg if you want to increase N from 8 to 16 you have to decrease TILE_SIZE from 100 to 50
+//  if you want to increase N from 8 to 16 you have to decrease TILE_SIZE from 100 to 50 etc.
 #define N 8                    //  size of one side of the square map
 #define TILE_SIZE 100          //  size of one tile on the map
 
 //  window related
 #define WIDTH N*TILE_SIZE    //  window width
 #define HEIGHT N*TILE_SIZE   //  window height
-#define QUEEN_SCALE 0.13     //  scale used for queen to fit into one tile
+#define QUEEN_SCALE 0.13     //  scale used for queen iumages to fit into one tile
 
 
 // return values
@@ -27,7 +26,7 @@
 // create the window     
 sf::RenderWindow window(sf::VideoMode(sf::Vector2u(WIDTH, HEIGHT)), "Backtracking algorithm visualizer");
 
-//  constant values describing board
+//  constant values describing board values
 const int QUEEN_NUM = 1;
 const int EMPTY_NUM = 0;
 
@@ -43,8 +42,7 @@ const int EMPTY_NUM = 0;
 */
 
 
-//  Board stores all important data and renders the actual board seen by the user
-//  also draws queens
+//  Board stores all important data and renders the actual board seen by the user and also draws queens
 class Board {
     public:
         std::array<sf::RectangleShape, N> boardTiles;
@@ -56,7 +54,6 @@ class Board {
 
         Board() {
             map = {{EMPTY_NUM}};
-            black = 0;
             if (!whiteQueenTexture.loadFromFile("/Users/roiqk/Desktop/Programming/C:C++/C++/NumeroDuo/Assets/whiteQueen.png")) std::exit(0);
             if (!blackQueenTexture.loadFromFile("/Users/roiqk/Desktop/Programming/C:C++/C++/NumeroDuo/Assets/blackQueen.png")) std::exit(0);
         }
@@ -64,6 +61,7 @@ class Board {
         //  draws the bard
         void render(void)
         {
+            black = 0;
             window.clear();
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
@@ -73,7 +71,8 @@ class Board {
                     if (black % 2 == true) {
                         boardTiles[i].setFillColor(sf::Color::Black);
                         queenSprite.setTexture(whiteQueenTexture);
-                    } else {
+                    } 
+                    else {
                         boardTiles[i].setFillColor(sf::Color::White);
                         queenSprite.setTexture(blackQueenTexture);
                     }
@@ -111,14 +110,12 @@ void printOut(Board &board);                    //  prints board to the console
 //  starts the program
 int main()
 {
-    while (true) {
-        Board board = Board();
+    Board board = Board();
 
-        addRandomQueen(board);
+    addRandomQueen(board);
 
-        sfml(board);
-
-    }
+    sfml(board);
+     
     return SUCCESS;
 }
 
@@ -144,7 +141,7 @@ void addRandomQueen(Board &board)
 */
 
 
-//  visualizes the algorithm
+//  opens the window and calls solving function
 void sfml(Board &board)
 {
     window.setFramerateLimit (60);
@@ -201,7 +198,7 @@ bool NQsolve(Board &board, int row)
     for (int i = 0; i < N; i++) {
         if (isValid(board, row, i)) {
             board.map[row][i] = QUEEN_NUM;
-            board.render();
+            board.render();   
             printOut(board);
             if (NQsolve(board, row+1)) return true;
         }
@@ -211,7 +208,7 @@ bool NQsolve(Board &board, int row)
 }
 
 
-//  print the board in user-readable form and returns Queen positions (not designed for N > 27)
+//  print the board in user-friendly form and returns Queen positions (not designed for N > 27)
 void printOut(Board &board)
 {
     std::cout << std::endl;

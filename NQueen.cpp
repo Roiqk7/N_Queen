@@ -50,10 +50,12 @@ class Board {
         sf::Texture whiteQueenTexture;
         sf::Texture blackQueenTexture;
         sf::Sprite queenSprite;
+        int iterations;
         int black;        
 
         Board() {
             map = {{EMPTY_NUM}};
+            iterations = 0;
             if (!whiteQueenTexture.loadFromFile("path to /whiteQueen.png")) std::exit(0);
             if (!blackQueenTexture.loadFromFile("path to /blackQueen.png")) std::exit(0);
         }
@@ -62,6 +64,7 @@ class Board {
         void render(void)
         {
             black = 0;
+            iterations++;
             window.clear();
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
@@ -228,4 +231,5 @@ void printOut(Board &board)
         std::cout << '|' << N - i << '\n';
     }
     std::cout << '\n' << formattedReturn << '\n';
+    std::cout << "Total iterations: " << board.iterations << '\n';
 }

@@ -8,15 +8,15 @@
 #include <random>
 #include <SFML/Graphics.hpp>
 
-//  map related -> base N = 8; TILE_SIZE = 100 
-//  if you want to increase N from 8 to 16 you have to decrease TILE_SIZE from 100 to 50 etc.
-#define N 8                    //  size of one side of the square map
-#define TILE_SIZE 100          //  size of one tile on the map
+//  map related -> base N = 16; TILE_SIZE = 50 
+//  if you want to decrease N from 16 to 8 you have to increase TILE_SIZE from 50 to 100 and increase QUEEN_SCALE from 0.065 to 0.13
+#define N 16                   //  size of one side of the square map
+#define TILE_SIZE 50           //  size of one tile on the map
 
 //  window related
 #define WIDTH N*TILE_SIZE    //  window width
 #define HEIGHT N*TILE_SIZE   //  window height
-#define QUEEN_SCALE 0.13     //  scale used for queen iumages to fit into one tile
+#define QUEEN_SCALE 0.065    //  scale used for queen iumages to fit into one tile
 
 
 // return values
